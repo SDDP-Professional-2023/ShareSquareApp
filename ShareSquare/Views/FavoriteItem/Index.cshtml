@@ -1,0 +1,58 @@
+﻿@model List<FavoriteItem>
+
+@{
+    ViewData["Title"] = "Saved Items";
+
+
+}
+
+<div>
+    <!-- Items list -->
+    @if (Model.Count == 0)
+    {
+        <h3 class="text-center mt-5">There is no Saved items</h3>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var favoriteItem in Model)
+                {
+                    var item = favoriteItem.Item;
+                    var image = item.ImageUrl;
+                    if (image != null && !image.StartsWith('h'))
+                    {
+                        image = "~/Images/" + image;
+                    }
+
+                    <tr>
+                        <td><img src="@image" alt="Item image" style="height:100px; width:100px;" asp-append-version="true"></td>
+                        <td>@item.Title</td>
+                        <td>@item.AuthorOrDeveloper</td>
+                        <td>@item.Description</td>
+                        <td>&pound;@item.Price</td>
+                        <td>
+                            <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" class="btn btn-primary" style="margin-right: 10px;">
+                                View
+                            </a>
+                        </td>
+                        <td>
+                            <form asp-action="RemoveFavoriteItem" asp-controller="FavoriteItem" asp-route-id="@favoriteItem.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

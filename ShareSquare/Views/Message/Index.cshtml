@@ -1,0 +1,107 @@
+﻿@model List<MessageConversationViewModel>
+
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<div class="row">
+    <div class="col-3">
+        <h3>Conversations</h3>
+        <div class="list-group">
+            @foreach (var conversation in Model)
+            {
+                <div class="list-group-item">
+                    <a href="#" onclick="loadConversation('@User.Identity.Name', '@conversation.Receiver')">
+                        Conversation with @conversation.Receiver
+                    </a>
+                    @*<button onclick="deleteConversation('@conversation.Receiver')" class="btn btn-sm btn-danger float-right">Delete</button>*@
+                </div>
+                <br />
+            }
+        </div>
+    </div>
+
+    <div class="col-9">
+        @Html.Hidden("senderEmail", User.Identity.Name, new { id = "senderEmail" })
+        <input type="hidden" id="receiverEmail" />
+
+        <div class="row">
+            <div>
+                <h4>Messages</h4>
+                <div id="messagesContainer" class="messages-container">
+                    <ul id="messagesList"></ul>
+                </div>
+                <div class="input-area">
+                    <div id="chatMessage" contenteditable="true" placeholder="Type a message..."></div>
+                    <input type="button" id="sendMessage" value="Send" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/signalr.js"></script>
+<script src="~/js/message.js"></script>
+
+<style>
+    .messages-container {
+        height: 80vh;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+        .messages-container ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .messages-container li {
+            margin: 10px 0;
+        }
+
+            .messages-container li.received {
+                text-align: left;
+            }
+
+            .messages-container li.sent {
+                text-align: right;
+            }
+
+    .input-area {
+        display: flex;
+        margin-top: 10px;
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+    }
+
+        .input-area > div {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            outline: none;
+            max-height: 100px;
+            overflow-y: auto;
+            resize: none;
+        }
+
+        .input-area #sendMessage {
+            margin-left: 10px;
+        }
+
+    .sent-message {
+        background-color: #32CD32;
+        padding: 2px 5px;
+        border-radius: 3px;
+    }
+
+    .received-message {
+        background-color: #FFD700;
+        padding: 2px 5px;
+        border-radius: 3px;
+    }
+
+
+</style>

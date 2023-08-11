@@ -1,6 +1,9 @@
 html {
   font-size: 14px;
 }
+body {
+    background-color: #6fe2c9;
+}
 
 @media (min-width: 768px) {
   html {
@@ -15,4 +18,34 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.btn-facebook {
+    background-color: #3b5998;
+    border-color: #3b5998;
+    color: white;
+}
+
+.btn-google {
+    background-color: #db4437;
+    border-color: #db4437;
+    color: white;
+}
+
+.btn-twitter {
+    background-color: #1da1f2;
+    border-color: #1da1f2;
+    color: white;
+}
+
+/*navbar styling*/
+#navbar-custom {
+    background-color: #007a7b;
+    color: #e04a4e;
+}
+.navbar-brand {
+    color: #e04a4e;
+}
+.nav-item a, .dropdown a {
+    color: #6fe2c9;
 }

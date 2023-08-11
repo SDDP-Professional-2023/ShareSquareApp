@@ -1,0 +1,108 @@
+﻿@model Item
+
+@{
+    ViewData["Title"] = "Edit Item";
+}
+
+@{
+    var conditions = new string[] { "Excellent", "Very good", "Good" };
+}
+
+
+<form asp-controller="Item" asp-action="Edit" method="post" id="item-form">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Create Item</h2>
+            <hr />
+        </div>
+        <input type="hidden" asp-for="ItemId" />
+        <input type="hidden" asp-for="Created_at" />
+        <input type="hidden" asp-for="Updated_at" />
+        <div class="mb-3">
+            <label asp-for="ItemType" id="itemTypeLabel"></label>
+            <select asp-for="ItemType" class="form-control" id="itemTypeSelect">
+                <option value="Book">Book</option>
+                <option value="Game">Game</option>
+            </select>
+            <span asp-validation-for="ItemType" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AuthorOrDeveloper" id="authorDeveloperLabel"></label>
+            <input asp-for="AuthorOrDeveloper" class="form-control" />
+            <span asp-validation-for="AuthorOrDeveloper" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Genre"></label>
+            <input asp-for="Genre" class="form-control" />
+            <span asp-validation-for="Genre" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PublicationYearOrReleaseYear" id="yearLabel"></label>
+            <select asp-for="PublicationYearOrReleaseYear" class="form-control">
+                @for (int year = 2000; year <= 2023; year++)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+            <span asp-validation-for="PublicationYearOrReleaseYear" class="text-danger"></span>
+        </div>
+
+
+        <div class="mb-3">
+            <label asp-for="ImageUrl"></label>
+            <input asp-for="ImageUrl" class="form-control"  disabled/>
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Condition"></label>
+            <select asp-for="Condition" class="form-control">
+                @foreach (var condition in conditions)
+                {
+                    <option value="@condition">@condition</option>
+                }
+            </select>
+            <span asp-validation-for="Condition" class="text-danger"></span>
+        </div>
+
+
+        <div class="mb-3">
+            <label asp-for="Language"></label>
+            <input asp-for="Language" class="form-control" />
+            <span asp-validation-for="Language" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:150px">Edit</button>
+
+        <a asp-controller="UserItems" asp-action="Index" class="btn btn-secondary" style="width:150px">
+            Back to List
+        </a>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,112 @@
+﻿@model List<Item>
+@{
+    ViewData["Title"] = "Manage User Listings";
+    var statuses = Enum.GetValues(typeof(ItemStatus));
+}
+
+<h2>Manage User Listings</h2>
+
+<form id="filter-form" class="mb-3">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="status" value="" checked onchange="filterItems(this.value)">
+        <label class="form-check-label">All</label>
+    </div>
+    @foreach (var status in statuses)
+    {
+        if (status.ToString() != "Deleted")
+        {
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="status" value="@status" onchange="filterItems(this.value)">
+                <label class="form-check-label">@status</label>
+            </div>
+        }
+    }
+</form>
+
+
+@if (Model.Count == 0)
+{
+    <h3 class="text-center">You have no Item in the list.</h3>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var image = item.ImageUrl;
+                if (image != null && !image.StartsWith('h'))
+                {
+                    image = "~/Images/" + image;
+                }
+                <tr data-status="@item.Status">
+                    <td><img src="@image" alt="Item image" style="height:100px; width:100px;" asp-append-version="true"></td>
+                    <td>@item.Title</td>
+                    <td>@item.AuthorOrDeveloper</td>
+                    <td>@item.Description</td>
+                    <td>&pound;@item.Price</td>
+                    <td>
+                        <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" class="btn btn-primary">
+                            View
+                        </a>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Item" asp-action="Edit" asp-route-id="@item.ItemId">Edit</a>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-danger" asp-action="SoftDelete" asp-route-id="@item.ItemId">Delete</a>
+                    </td>
+                    @if (item.Status != ItemStatus.Done)
+                    {
+                        <td>
+                            <a class="btn btn-success" asp-action="UpdateStatus" asp-route-id="@item.ItemId" asp-route-status="Done">Mark as Done</a>
+                        </td>
+                    }
+
+                    @if (item.Status == ItemStatus.Done)
+                    {
+                        <td>
+                            <a class="btn btn-secondary" asp-action="UpdateStatus" asp-route-id="@item.ItemId" asp-route-status="Archived">Archive</a>
+                        </td>
+                    }
+
+                    @if (item.Status == ItemStatus.Archived)
+                    {
+                        <td>
+                            <a class="btn btn-secondary" asp-action="UpdateStatus" asp-route-id="@item.ItemId" asp-route-status="Active">Remove from Archive</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section Scripts {
+    <script>
+        function filterItems(status) {
+            var items = document.querySelectorAll('[data-status]');
+
+            items.forEach(function (item) {
+                if (status == "" || item.getAttribute('data-status') == status) {
+                    item.style.display = "";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+
+}

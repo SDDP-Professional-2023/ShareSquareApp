@@ -1,0 +1,256 @@
+﻿@model List<Item>
+
+@{
+    ViewData["Title"] = "Items";
+}
+
+@{
+    var conditions = new string[] { "Excellent", "Very good", "Good" };
+}
+
+<h1>List of Items</h1>
+
+<div class="row">
+    <div class="col-md-3">
+
+        <div class="mb-3">
+            <label>Start Year</label>
+            <select id="startYear" class="form-control">
+                @for (int year = 2000; year <= 2023; year++)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>End Year</label>
+            <select id="endYear" class="form-control">
+                @for (int year = 2000; year <= 2023; year++)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+            <div class="text-danger" id="yearValidationError" style="display:none;">Start Year should be less than or equal to End Year.</div>
+        </div>
+
+
+        <div class="mb-3">
+            <label>Language</label>
+            <input type="text" id="language" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Condition</label>
+            <select id="condition" class="form-control">
+                @foreach (var condition in conditions)
+                {
+                    <option value="@condition">@condition</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Price</label>
+            <input type="text" id="price" class="form-control" />
+        </div>
+
+        <div class="mt-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="category" id="all" value="all" checked>
+                <label class="form-check-label" for="all">
+                    All
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="category" id="book" value="book">
+                <label class="form-check-label" for="book">
+                    Books
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="category" id="game" value="game">
+                <label class="form-check-label" for="game">
+                    Games
+                </label>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="filter-btn">Filter</button>
+        <button type="button" class="btn btn-secondary" id="clear-filter-btn" style="display: none;">Clear Filter</button>
+    </div>
+
+
+    <div class="col-md-9">
+        <button class="btn btn-primary sort-btn" id="price-asc-btn" data-sort="price" data-sort-order="asc">Sort by Price Asc</button>
+        <button class="btn btn-primary sort-btn" id="price-desc-btn" data-sort="price" data-sort-order="desc">Sort by Price Desc</button>
+        <button class="btn btn-primary sort-btn" id="year-asc-btn" data-sort="year" data-sort-order="asc">Sort by Year Asc</button>
+        <button class="btn btn-primary sort-btn" id="year-desc-btn" data-sort="year" data-sort-order="desc">Sort by Year Desc</button>
+        <button class="btn btn-secondary" id="clear-sort" style="display: none;">Clear Sort</button>
+
+        @if (Model.Count == 0)
+        {
+            <h3 class="text-center">There are no items. Try using the filter.</h3>
+        }
+        else
+        {
+            <table class="table" id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Description</th>
+                        <th>Year</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var image = item.ImageUrl;
+                        if (image != null && !image.StartsWith('h'))
+                        {
+                            image = "~/Images/" + image;
+                        }
+
+                        <tr class="@item.ItemType.ToLower()" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
+                            <td><img src="@image" alt="Item image" style="height:100px; width:100px;" asp-append-version="true"></td>
+                            <td>@item.Title</td>
+                            <td>@item.AuthorOrDeveloper</td>
+                            <td>@item.Description</td>
+                            <td>@item.PublicationYearOrReleaseYear</td>
+                            <td>&pound;@item.Price</td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" class="btn btn-primary">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function (event) {
+            document.querySelectorAll('.sort-btn').forEach(function (button) {
+                button.addEventListener('click', function (event) {
+                    var sortKey = event.target.getAttribute('data-sort');
+                    var sortOrder = event.target.getAttribute('data-sort-order');
+                    sortTable(sortKey, sortOrder);
+                    activateButton(sortKey, sortOrder);
+                });
+            });
+
+            document.getElementById('clear-sort').addEventListener('click', function () {
+                location.reload();
+            });
+        });
+
+        function activateButton(sortKey, sortOrder) {
+            ['price-asc-btn', 'price-desc-btn', 'year-asc-btn', 'year-desc-btn'].forEach(function (btnId) {
+                document.getElementById(btnId).disabled = false;
+            });
+
+            document.getElementById(`${sortKey}-${sortOrder}-btn`).disabled = true;
+
+            document.getElementById('clear-sort').style.display = "inline-block";
+        }
+
+        function sortTable(sortKey, sortOrder) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("itemsTable");
+            switching = true;
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+
+                    x = rows[i].getAttribute('data-' + sortKey);
+                    y = rows[i + 1].getAttribute('data-' + sortKey);
+
+                    if (sortOrder == 'asc') {
+                        if (parseInt(x) > parseInt(y)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else {
+                        if (parseInt(x) < parseInt(y)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    </script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#filter-btn').click(function () {
+                let startYear = $('#startYear').val();
+                let endYear = $('#endYear').val();
+
+                if (parseInt(startYear) > parseInt(endYear)) {
+                    $('#yearValidationError').show();
+                    return; 
+                } else {
+                    $('#yearValidationError').hide();
+                }
+
+                let language = $('#language').val();
+                let condition = $('#condition').val();
+                let price = $('#price').val();
+                let category = $('input[name="category"]:checked').val();
+
+                $('#itemsTable tbody tr').each(function () {
+                    let itemYear = $(this).data('year');
+
+                    if ((category === 'all' || $(this).hasClass(category)) &&
+                        (!startYear || itemYear >= startYear) &&
+                        (!endYear || itemYear <= endYear) &&
+                        (!language || $(this).data('language').toLowerCase().includes(language.toLowerCase())) &&
+                        (!condition || $(this).data('condition').toLowerCase().includes(condition.toLowerCase())) &&
+                        (!price || $(this).data('price') <= price)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                $('#clear-filter-btn').show();
+            });
+
+            $('#clear-filter-btn').click(function () {
+                $('#startYear').val('');
+                $('#endYear').val('');
+                $('#language').val('');
+                $('#condition').val('');
+                $('#price').val('');
+                $('input[name="category"]').prop('checked', false);
+                $('#all').prop('checked', true);
+
+                $('#itemsTable tbody tr').show();
+                $('#yearValidationError').hide();
+                $(this).hide();
+            });
+        });
+    </script>
+}
+
+

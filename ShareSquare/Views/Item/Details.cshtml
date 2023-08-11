@@ -1,0 +1,174 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model ShareSquare.Data.Models.ItemDetailViewModel
+
+@{
+    var user = Model.Item.User; // you need to pass the ApplicationUser to the View
+    var loggedInUserId = UserManager.GetUserId(User);
+    var reviews = ViewData["Reviews"];
+
+    var image = @Model.Item.ImageUrl;
+    if (image != null && !image.StartsWith('h'))
+    {
+        image = "~/Images/" + image;
+    }
+}
+
+<div class="container m-3">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="@image" alt="Item image" style="height:300px; width:300px;" asp-append-version="true">
+        </div>
+        <div class="col-md-6">
+            <h1>@Model.Item.Title</h1>
+            <p>Author/Developer: @Model.Item.AuthorOrDeveloper</p>
+            <p>Genre: @Model.Item.Genre</p>
+            <p>Release Year: @Model.Item.PublicationYearOrReleaseYear</p>
+            <p>Condition: @Model.Item.Condition</p>
+            <p>Language: @Model.Item.Language</p>
+            <p>Description: @Model.Item.Description</p>
+            <p>Price: &pound;@Model.Item.Price</p>
+
+            <a href="@(ViewData["Referrer"] ?? Url.Action("Index", "Item"))" class="btn btn-secondary">
+                Back to List
+            </a>
+
+            @if (SignInManager.IsSignedIn(User) && Model.Item.User.Id != loggedInUserId)
+            {
+                if ((bool)ViewData["IsSaved"])
+                {
+                    <button id="save-button" data-item-id="@Model.Item.ItemId" class="btn btn-primary" disabled>
+                        Item Saved!
+                    </button>
+                }
+                else
+                {
+                    <button id="save-button" data-item-id="@Model.Item.ItemId" class="btn btn-primary">
+                        Add to Saved Items
+                    </button>
+                }
+            }
+
+        </div>
+    </div>
+    
+    <div class="row mt-2">
+        <div class="col-md-2">
+            <h2>@user.Name</h2>
+            <p>@user.Rating</p>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <p id="phoneNumber">@user.PhoneNumber</p>
+                <button id="togglePhoneBtn" class="btn btn-primary">Show Number</button>
+
+                <br />
+                <br />
+                <form asp-controller="Message" asp-action="Create" id="send-message-form">
+                    <input type="hidden" id="receiverId" name="receiverId" value="@Model.Item.User.Id">
+                    <input type="hidden" id="itemId" name="itemId" value="@Model.Item.ItemId">
+                    <textarea name="content" id="messageContent" placeholder="Write your message..."></textarea>
+                    <button type="submit">Send</button>
+                </form>
+
+            }
+        </div>
+        <div class="col-md-10 mb-5">
+
+            @if (SignInManager.IsSignedIn(User) && Model.Item.User.Id != loggedInUserId)
+            {
+                <div>
+                    <h2>Add Review</h2>
+                    <form asp-action="Create" asp-controller="Review" method="post">
+                        <input type="hidden" name="ItemId" value="@Model.Item.ItemId" />
+                        <div class="form-group">
+                            <label for="rating">Rating</label>
+                            <select id="rating" name="Rating" class="form-control">
+                                <option value="">Select...</option>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="review-text">Review</label>
+                            <textarea id="review-text" name="Text" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+            }
+
+            <div>
+                <h2>Reviews</h2>
+                @if (@Model.Reviews.Count == 0)
+                {
+                    <h2 class="text-center">No Reviews Yet!!!</h2>
+                } else {
+                @foreach (var review in @Model.Reviews)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@review.Text</h5>
+                            <p class="card-text">Rating: @review.Rating</p>
+                            <p class="card-text">Reviewed by: @review.ReviewerUser.Name</p>
+                            <p class="card-text">@review.Timestamp.ToString("D")</p>
+                        </div>
+                    </div>
+                }
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#save-button').click(function () {
+                var itemId = $(this).data('item-id');
+
+                $.ajax({
+                    url: '/FavoriteItem/AddToFavorites',
+                    type: 'POST',
+                    data: {
+                        id: itemId
+                    }
+                }).done(function () {
+                    // Update UI to show that item was saved, maybe change button text or color
+                    $('#save-button').text('Item Saved!').prop('disabled', true);
+                }).fail(function () {
+                    // Show error message
+                    alert('Failed to save item');
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Initially hide the phone number
+            $("#phoneNumber").hide();
+
+            // Add click event to the button
+            $("#togglePhoneBtn").click(function () {
+                // Toggle the visibility of the phone number
+                $("#phoneNumber").toggle();
+
+                // Check the current text of the button and update accordingly
+                if ($(this).text() === "Show Number") {
+                    $(this).text("Hide Number");
+                } else {
+                    $(this).text("Show Number");
+                }
+            });
+        });
+    </script>
+
+}
+
+<script src="~/js/message.js"></script>

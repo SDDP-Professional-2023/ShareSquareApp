@@ -1,0 +1,54 @@
+﻿@model EditProfileViewModel
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+
+
+<div>
+    <h1 class="text-info">@ViewData["Title"]</h1>
+    @if (User.Identity.IsAuthenticated)
+    {
+        var twofactor = ViewData["TwoFactorEnabled"];
+        if (twofactor != null && twofactor.ToString().ToLower() == "true")
+        {
+            <a asp-action="RemoveAuthenticator" asp-controller="Account" class="btn btn-warning">Reset & Remove Two Factor Auth</a>
+        }
+        else
+        {
+            <a asp-action="EnableAuthenticator" asp-controller="Account">Setup Two Factor Auth</a>
+        }
+    }
+</div>
+<hr />
+<form asp-controller="Account" asp-action="EditProfile" method="post" class="form-horizontal" role="form">    
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-2">
+            <button type="submit" class="btn btn-success form-control">Save changes</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
