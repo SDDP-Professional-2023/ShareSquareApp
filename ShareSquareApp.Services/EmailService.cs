@@ -24,26 +24,26 @@ namespace ShareSquareApp.Services
         {
             try
             {
-                _emailServiceOptions = _configuration.GetSection("EmailServices").Get<EmailServiceOptions>();
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("ShareSquare", _emailServiceOptions.FromEmail));
-                message.To.Add(new MailboxAddress("Test", "c2069691@my.shu.ac.uk"));
-                message.Subject = subject;
+                //_emailServiceOptions = _configuration.GetSection("EmailServices").Get<EmailServiceOptions>();
+                //var message = new MimeMessage();
+                //message.From.Add(new MailboxAddress("ShareSquare", _emailServiceOptions.FromEmail));
+                //message.To.Add(new MailboxAddress("Test", "c2069691@my.shu.ac.uk"));
+                //message.Subject = subject;
 
-                message.Body = new TextPart("html")
-                {
-                    Text = body
-                };
+                //message.Body = new TextPart("html")
+                //{
+                //    Text = body
+                //};
 
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
-                {
-                    client.Connect("smtp.gmail.com", 587, false);
+                //using (var client = new MailKit.Net.Smtp.SmtpClient())
+                //{
+                //    client.Connect("smtp.gmail.com", 587, false);
 
-                    client.Authenticate(_emailServiceOptions.AuthenticateEmail, _emailServiceOptions.AuthenticatePassword);
+                //    client.Authenticate(_emailServiceOptions.AuthenticateEmail, _emailServiceOptions.AuthenticatePassword);
 
-                    client.Send(message);
-                    client.Disconnect(true);
-                }
+                //    client.Send(message);
+                //    client.Disconnect(true);
+                //}
             }
             catch (SmtpCommandException ex)
             {

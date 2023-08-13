@@ -74,9 +74,9 @@ namespace ShareSquare.Controllers
                         // Generate the callback URL for resetting the password
                         var callbackurl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
 
-                        // Send the password reset link via email to the user
-                        _emailService.SendEmail(model.Email, "Confirm your account - Identity Manager",
-                            "Please confirm your account by clicking here: <a href=\"" + callbackurl + "\">link</a>");
+                        //// Send the password reset link via email to the user
+                        //_emailService.SendEmail(model.Email, "Confirm your account - Identity Manager",
+                        //    "Please confirm your account by clicking here: <a href=\"" + callbackurl + "\">link</a>");
 
                         // signs the user into the application 
                         await _signInManager.SignInAsync(user, isPersistent: false);

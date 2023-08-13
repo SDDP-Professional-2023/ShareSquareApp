@@ -60,20 +60,20 @@ namespace ShareSquare
                 options.User.RequireUniqueEmail = true;
 
             });
-            builder.Services.AddAuthentication().AddFacebook(options =>
-            {
-                var Facebook = builder.Configuration.GetSection("Facebook").Get<FacebookOptions>();
-                options.AppId = Facebook.AppId;
-                options.AppSecret = Facebook.AppSecret;
-            });
+            //builder.Services.AddAuthentication().AddFacebook(options =>
+            //{
+            //    var Facebook = builder.Configuration.GetSection("Facebook").Get<FacebookOptions>();
+            //    options.AppId = Facebook.AppId;
+            //    options.AppSecret = Facebook.AppSecret;
+            //});
 
-            builder.Services.AddAuthentication().AddGoogle(options =>
-            {
-                var Google = builder.Configuration.GetSection("Google").Get<GoogleOptions>();
+            //builder.Services.AddAuthentication().AddGoogle(options =>
+            //{
+            //    var Google = builder.Configuration.GetSection("Google").Get<GoogleOptions>();
 
-                options.ClientId = Google.ClientId;
-                options.ClientSecret = Google.ClientSecret;
-            });
+            //    options.ClientId = Google.ClientId;
+            //    options.ClientSecret = Google.ClientSecret;
+            //});
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();

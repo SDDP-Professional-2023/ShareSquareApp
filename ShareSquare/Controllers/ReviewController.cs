@@ -43,7 +43,7 @@ namespace ShareSquare.Controllers
                     var userReviews = await _reviewService.GetReviewsByID(reviewedUser.Id);
 
                     var totalRating = userReviews.Sum(r => r.Rating) + review.Rating;
-                    reviewedUser.Rating = totalRating / (userReviews.Count + 1);
+                    //reviewedUser.Rating = (double)(totalRating / (userReviews.Count + 1));
 
                     var result = await _userManager.UpdateAsync(reviewedUser);
 

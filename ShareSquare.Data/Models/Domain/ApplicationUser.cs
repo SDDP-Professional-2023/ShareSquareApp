@@ -12,7 +12,7 @@ namespace ShareSquare.Data.Models.Domain
     {
         [Required]
         public string Name { get; set; }
-        public decimal Rating { get; set; }
+        //public double Rating { get; set; }
         public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
     }

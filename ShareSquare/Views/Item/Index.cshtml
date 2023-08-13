@@ -7,13 +7,15 @@
 @{
     var conditions = new string[] { "Excellent", "Very good", "Good" };
 }
-
-<h1>List of Items</h1>
+<div class="itemTitle">
+<h1>List of Items</h1></div>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 ml-4 first-col">
+        <div class="col-container">
 
-        <div class="mb-3">
+
+        <div class="mb-3 top-first">
             <label>Start Year</label>
             <select id="startYear" class="form-control">
                 @for (int year = 2000; year <= 2023; year++)
@@ -78,14 +80,15 @@
 
         <button type="button" class="btn btn-primary" id="filter-btn">Filter</button>
         <button type="button" class="btn btn-secondary" id="clear-filter-btn" style="display: none;">Clear Filter</button>
+        </div>
     </div>
 
 
-    <div class="col-md-9">
-        <button class="btn btn-primary sort-btn" id="price-asc-btn" data-sort="price" data-sort-order="asc">Sort by Price Asc</button>
-        <button class="btn btn-primary sort-btn" id="price-desc-btn" data-sort="price" data-sort-order="desc">Sort by Price Desc</button>
-        <button class="btn btn-primary sort-btn" id="year-asc-btn" data-sort="year" data-sort-order="asc">Sort by Year Asc</button>
-        <button class="btn btn-primary sort-btn" id="year-desc-btn" data-sort="year" data-sort-order="desc">Sort by Year Desc</button>
+    <div class="col-md-9 sor second-col " id="second-col ">
+        <button class="btn  sort-btn" id="price-asc-btn" data-sort="price" data-sort-order="asc">Sort by Price Asc</button>
+        <button class="btn  sort-btn" id="price-desc-btn" data-sort="price" data-sort-order="desc">Sort by Price Desc</button>
+        <button class="btn btn-custom sort-btn" id="year-asc-btn" data-sort="year" data-sort-order="asc">Sort by Year Asc</button>
+        <button class="btn y sort-btn" id="year-desc-btn" data-sort="year" data-sort-order="desc">Sort by Year Desc</button>
         <button class="btn btn-secondary" id="clear-sort" style="display: none;">Clear Sort</button>
 
         @if (Model.Count == 0)
@@ -94,8 +97,9 @@
         }
         else
         {
-            <table class="table" id="itemsTable">
-                <thead>
+            @*<div class="table" id="itemsTable">*@
+                <div>
+               @* <thead>
                     <tr>
                         <th>Image</th>
                         <th>Title</th>
@@ -104,8 +108,12 @@
                         <th>Year</th>
                         <th>Price</th>
                     </tr>
-                </thead>
-                <tbody>
+                </thead>*@
+                @*<tbody>*@
+
+                    <div class="card-container">
+                <div class="row row-cols-1 row-cols-md-3 g-4 itemsList">
+
                     @foreach (var item in Model)
                     {
                         var image = item.ImageUrl;
@@ -114,7 +122,58 @@
                             image = "~/Images/" + image;
                         }
 
-                        <tr class="@item.ItemType.ToLower()" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
+                   
+                       
+                        <div class="card h-100  @item.ItemType.ToLower()" style="width: 20rem; height:30rem;" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
+                            <img src="@image" style="height: 12rem;" alt="Item image" asp-append-version="true" class="card-img-top">
+                            <div class="card-body ">
+                                <h5 class="card-title">@item.Title</h5>
+                                <p class="card-text card-description">@item.Description</p>
+                                <p class="card-text">@item.PublicationYearOrReleaseYear</p>
+                                <p class="card-text">&pound;@item.Price</p>
+                                <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" role="button" class="btn btn-primary btn-block">
+                                    View
+                                </a>
+                            </div>
+                       
+                        </div>
+                   
+                       
+                   
+                    @*<div class="card-deck row @item.ItemType.ToLower()" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
+                        <div class="card">
+                            <img src="@image" alt="Item image"  asp-append-version="true" class="card-img-top" >
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Title</h5>
+                                <p>@item.AuthorOrDeveloper</p>
+                                <p class="card-text">@item.Description</p>
+                                <p>@item.PublicationYearOrReleaseYear</p>
+                                <p>&pound;@item.Price</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                            <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" class="btn btn-primary">
+                                View
+                            </a>
+                        </div>
+                        
+                    
+                    </div>*@
+                        @*<div class="@item.ItemType.ToLower()" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
+                        <img src="@image" alt="Item image" style="height:100px; width:100px;" asp-append-version="true">
+                        <p>@item.Title</p>
+                        <p>@item.AuthorOrDeveloper</p>
+                        <p>@item.Description</p>
+                        <p>@item.PublicationYearOrReleaseYear</p>
+                        <p>&pound;@item.Price</p>
+
+                        <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" class="btn btn-primary">
+                            View
+                        </a>
+
+
+                        </div>*@
+
+                      @*  <tr class="@item.ItemType.ToLower()" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
                             <td><img src="@image" alt="Item image" style="height:100px; width:100px;" asp-append-version="true"></td>
                             <td>@item.Title</td>
                             <td>@item.AuthorOrDeveloper</td>
@@ -126,10 +185,13 @@
                                     View
                                 </a>
                             </td>
-                        </tr>
+                        </tr>*@
                     }
-                </tbody>
-            </table>
+
+                </div>
+                </div>
+                @*</tbody>*@
+            </div>
         }
     </div>
 </div>
