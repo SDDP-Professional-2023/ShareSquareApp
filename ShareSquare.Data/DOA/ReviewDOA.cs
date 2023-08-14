@@ -30,5 +30,15 @@ namespace ShareSquare.Data.DOA
                 .Where(r => r.ReviewedUserId == userId)
                 .ToListAsync();
         }
+
+        public async Task<List<Review>> GetReviews()
+        {
+            return await _context.Reviews.ToListAsync();
+        }
+
+        public async Task<int> GetReviewCount()
+        {
+            return await _context.Reviews.CountAsync();
+        }
     }
 }

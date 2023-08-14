@@ -11,6 +11,8 @@ namespace ShareSquareApp.Services.IServices
     public interface IReviewService
     {
         Review AddReview(ReviewDTO reviewDto, string reviewedUserId, ApplicationUser reviewerUser);
+        Task<List<Review>> GetReviews();
         Task<List<Review>> GetReviewsByID(string id);
+        Task<int> GetReviewsCount();
     }
 }

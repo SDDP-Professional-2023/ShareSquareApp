@@ -48,6 +48,15 @@ namespace ShareSquare.Data.DOA
             }
         }
 
+        public async Task<List<Item>> GetAllItems()
+        {
+             return await _context.Items.ToListAsync();
+        }
+
+        public async Task<int> GetItemsCount()
+        {
+            return await _context.Items.CountAsync();
+        }
 
         public Item? GetUserItem(int id)
         {

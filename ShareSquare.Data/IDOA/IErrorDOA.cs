@@ -11,7 +11,8 @@ namespace ShareSquare.Data.IDOA
     {
         Task<Error> AddErrorAsync(Error error);
         Task<Error> GetErrorByIdAsync(int id);
-        Task<IEnumerable<Error>> GetAllErrorsAsync();
         Task<bool> UpdateErrorStatusAsync(int id, string status);
+        Task<List<Error>> GetAllErrorsAsync();
+        Task<int> GetErrorsCount();
     }
 }

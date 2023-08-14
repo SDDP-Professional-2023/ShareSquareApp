@@ -11,8 +11,9 @@ namespace ShareSquareApp.Services.IServices
     {
         Task<Error> CreateErrorAsync(Error error);
         Task<Error> GetErrorByIdAsync(int id);
-        Task<IEnumerable<Error>> GetAllErrorsAsync();
         Task<bool> SetErrorStatusAsync(int id, string status);
         Task LogErrorAsync(Exception ex);
+        Task<List<Error>> GetAllErrorsAsync();
+        Task<int> GetErrorsCount();
     }
 }

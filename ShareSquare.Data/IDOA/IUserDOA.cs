@@ -11,5 +11,6 @@ namespace ShareSquare.Data.IDOA
     public interface IUserDOA
     {
         Task<List<IdentityUser>> Users();
+        Task<int> UsersCount();
     }
 }

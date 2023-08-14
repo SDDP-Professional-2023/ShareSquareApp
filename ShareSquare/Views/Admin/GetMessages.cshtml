@@ -1,0 +1,30 @@
+﻿@model ViewModel<Message>
+
+@{
+    ViewData["Title"] = "Admin - Messages";
+}
+
+<h1>Messages</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Text</th>
+            <th>Timestamp</th>
+            <th>Deleted</th>
+            <th>Sender Email</th>
+            <th>Receiver Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in Model.Elements)
+        {
+            <tr>
+                <td>@message.Text</td>
+                <td>@message.Timestamp.ToString("g")</td>
+                <td>@(message.Deleted ? "Yes" : "No")</td>
+                <td>@message.Sender.Email</td>
+                <td>@message.Receiver.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>

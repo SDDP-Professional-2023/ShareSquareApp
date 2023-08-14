@@ -74,5 +74,17 @@ namespace ShareSquareApp.Services
 
             return items;
         }
+
+        public async Task<List<Item>> GetAllItems()
+        {
+            var items = await _itemDOA.GetAllItems();
+
+            return items;
+        }
+
+        public async Task<int> GetItemsCount()
+        {
+            return await _itemDOA.GetItemsCount();
+        }
     }
 }

@@ -17,5 +17,7 @@ namespace ShareSquare.Data.IDOA
         Task<List<Item>> GetItems(string currentUserId = null);
         Task UpdateItem(Item item);
         void Update(Item item);
+        Task<List<Item>> GetAllItems();
+        Task<int> GetItemsCount();
     }
 }

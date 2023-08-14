@@ -12,8 +12,10 @@ namespace ShareSquareApp.Services.IServices
     {
         Task<Message> AddMessageAsync(ApplicationUser sender, ApplicationUser receiver, string content);
         Task DeleteMessageAsync(int messageId);
+        Task<List<Message>> GetAllMessages();
         Task<List<MessageViewModel>> GetHistoricalMessagesAsync(string sender, string receiver);
         Task<List<Message>> GetMessagesAsync(string userId);
         Task<List<Message>> GetMessagesAsync(string senderId, string receiverId);
+        Task<int> GetMessagesCount();
     }
 }

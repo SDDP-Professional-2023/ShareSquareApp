@@ -35,5 +35,16 @@ namespace ShareSquareApp.Services
             var reviews = await _reviewDOA.GetReviewsByUserId(id);
             return reviews;
         }
+
+        public async Task<List<Review>> GetReviews()
+        {
+            var reviews = await _reviewDOA.GetReviews();
+            return reviews;
+        }
+
+        public async Task<int> GetReviewsCount() 
+        {
+            return await _reviewDOA.GetReviewCount();
+        }
     }
 }

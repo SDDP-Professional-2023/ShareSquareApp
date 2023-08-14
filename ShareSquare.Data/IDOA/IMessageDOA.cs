@@ -11,7 +11,9 @@ namespace ShareSquare.Data.IDOA
     {
         Task AddMessage(Message message);
         Task DeleteMessage(int messageId);
+        Task<List<Message>> GetAllMessages();
         Task<List<Message>> GetMessages(string userId);
         Task<List<Message>> GetMessages(string senderId, string receiverId);
+        Task<int> GetMessagesCount();
     }
 }

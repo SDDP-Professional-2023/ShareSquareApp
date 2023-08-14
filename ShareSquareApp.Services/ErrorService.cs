@@ -28,9 +28,14 @@ namespace ShareSquareApp.Services
             return await _errorDOA.GetErrorByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Error>> GetAllErrorsAsync()
+        public async Task<List<Error>> GetAllErrorsAsync()
         {
             return await _errorDOA.GetAllErrorsAsync();
+        }
+
+        public async Task<int> GetErrorsCount()
+        {
+            return await _errorDOA.GetErrorsCount();
         }
 
         public async Task<bool> SetErrorStatusAsync(int id, string status)

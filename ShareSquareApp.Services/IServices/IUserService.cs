@@ -10,5 +10,6 @@ namespace ShareSquareApp.Services.IServices
     public interface IUserService
     {
         Task<List<IdentityUser>> GetUsers();
+        Task<int> GetUsersCount();
     }
 }

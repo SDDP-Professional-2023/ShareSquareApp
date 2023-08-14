@@ -44,6 +44,7 @@ namespace ShareSquare.Controllers
             return View(items.ToList());
         }
 
+        // Only users that are login have access to this action.
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -164,10 +165,6 @@ namespace ShareSquare.Controllers
                 {
                     return NotFound();
                 }
-
-                var imageUrl = item.ImageUrl;
-                var imageToSee = imageUrl.Split("_")[1];
-                item.ImageUrl = imageToSee;
 
                 return View(item);
             }

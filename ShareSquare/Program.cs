@@ -134,6 +134,25 @@ namespace ShareSquare
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.Use(async (context, next) =>
+            {
+                if (string.IsNullOrEmpty(context.Request.Path.Value) || context.Request.Path.Value == "/")
+                {
+                    if (context.User.Identity.IsAuthenticated && context.User.IsInRole("Admin"))
+                    {
+                        context.Response.Redirect("/Admin/Index");
+                        return;
+                    }
+                    else
+                    {
+                        context.Response.Redirect("/Item/Index");
+                        return;
+                    }
+                }
+
+                await next.Invoke();
+            });
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Item}/{action=Index}/{id?}");

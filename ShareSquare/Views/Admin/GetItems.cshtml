@@ -1,0 +1,56 @@
+﻿@model ViewModel<Item>
+
+@{
+    ViewData["Title"] = "Admin - Items";
+}
+
+<h1>Items</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Item Type</th>
+            <th>Title</th>
+            <th>Author/Developer</th>
+            <th>Genre</th>
+            <th>Release Year</th>
+            <th>Image</th>
+            <th>Condition</th>
+            <th>Language</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Owner/User</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Elements)
+        {
+
+            var image = item.ImageUrl;
+            if (image != null && !image.StartsWith('h'))
+            {
+                image = "~/Images/" + image;
+            }
+
+            <tr>
+                <td>@item.ItemType</td>
+                <td>@item.Title</td>
+                <td>@item.AuthorOrDeveloper</td>
+                <td>@item.Genre</td>
+                <td>@item.PublicationYearOrReleaseYear</td>
+                <td><img src="@image" alt="Item image" style="height:100px; width:100px;" asp-append-version="true" /></td>
+                <td>@item.Condition</td>
+                <td>@item.Language</td>
+                <td>@item.Description</td>
+                <td>@item.Price</td>
+                <td>@item.Status</td>
+                <td>@item.User.Email</td> 
+                <td>@item.Created_at?.ToString("MM/dd/yyyy HH:mm")</td>
+                <td>@item.Updated_at?.ToString("MM/dd/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

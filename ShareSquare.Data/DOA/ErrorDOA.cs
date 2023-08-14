@@ -31,9 +31,14 @@ namespace ShareSquare.Data.DOA
             return await _context.Errors.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Error>> GetAllErrorsAsync()
+        public async Task<List<Error>> GetAllErrorsAsync()
         {
             return await _context.Errors.ToListAsync();
+        }
+
+        public async Task<int> GetErrorsCount()
+        {
+            return await _context.Errors.CountAsync();
         }
 
         public async Task<bool> UpdateErrorStatusAsync(int id, string status)

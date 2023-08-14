@@ -22,5 +22,10 @@ namespace ShareSquare.Data.DOA
         {
             return await _context.Users.ToListAsync();
         }
+
+        public async Task<int> UsersCount()
+        {
+            return await _context.Users.CountAsync();
+        }
     }
 }

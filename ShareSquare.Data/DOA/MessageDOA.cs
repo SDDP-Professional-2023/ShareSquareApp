@@ -56,6 +56,14 @@ namespace ShareSquare.Data.DOA
                 .ToListAsync();
         }
 
+        public async Task<List<Message>> GetAllMessages()
+        {
+            return await _context.Messages.ToListAsync();
+        }
 
+        public async Task<int> GetMessagesCount()
+        {
+            return await _context.Messages.CountAsync();
+        }
     }
 }

@@ -1,0 +1,34 @@
+﻿@model ViewModel<Review>
+
+
+@{
+    ViewData["Title"] = "Admin - Reviews";
+}
+
+<h1>Reviews</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Reviewed Email</th>
+            <th>Reviewer's Email</th>
+            <th>Rating</th>
+            <th>Review Text</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model.Elements)
+        {
+            <tr>
+                <td>@review.ReviewedUserId</td>
+                <td>@review.ReviewerUser.Email</td> 
+                <td>@review.Rating</td>
+                <td>@review.Text</td>
+                <td>@review.Created_at?.ToString("MM/dd/yyyy HH:mm")</td>
+                <td>@review.Updated_at?.ToString("MM/dd/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

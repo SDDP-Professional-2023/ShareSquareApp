@@ -1,0 +1,37 @@
+﻿@model ViewModel<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Admin - Users";
+}
+
+
+<h1>Users</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Rating</th>
+            <th>Items Count</th>
+            <th>Reviews Count</th>
+            <th>Email Confirmed</th>
+            <th>Two Factore Enabled</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Elements)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Name</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.Rating</td>
+                <td>@user.Items?.Count</td>
+                <td>@user.Reviews?.Count</td>
+                <td>@(user.EmailConfirmed ? "Yes" : "No")</td>
+                <td>@(user.TwoFactorEnabled ? "Yes" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>

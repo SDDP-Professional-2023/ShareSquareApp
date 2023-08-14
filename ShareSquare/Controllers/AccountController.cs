@@ -7,20 +7,23 @@ using ShareSquare.Data.Models;
 using ShareSquare.Data.Models.Domain;
 using ShareSquareApp.Services.IServices;
 using ShareSquareApp.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShareSquare.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly IEmailService _emailService;
         private readonly UrlEncoder _urlEncoder;
         private readonly IErrorService _errorService;
 
         // making use of dependency injection 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UrlEncoder urlEncoder, IEmailService emailService, IErrorService errorService)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, UrlEncoder urlEncoder, IEmailService emailService, IErrorService errorService, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,6 +31,7 @@ namespace ShareSquare.Controllers
             _urlEncoder = urlEncoder;
             _emailService = emailService;
             _errorService = errorService;
+            _roleManager = roleManager;
         }
         public IActionResult Index()
         {
@@ -35,9 +39,17 @@ namespace ShareSquare.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(string? returnurl = "")
         {
-            try { 
+            try {
+                if (!await _roleManager.RoleExistsAsync("Admin"))
+                {
+                    //create roles
+                    await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                    await _roleManager.CreateAsync(new IdentityRole("User"));
+                }
+
                 ViewData["ReturnUrl"] = returnurl;
                 RegisterViewModel registerViewModel = new RegisterViewModel();
                 return View(registerViewModel);
@@ -51,6 +63,7 @@ namespace ShareSquare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model, string? returnurl = "")
         {
             try
@@ -106,6 +119,7 @@ namespace ShareSquare.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             try { 
@@ -141,6 +155,7 @@ namespace ShareSquare.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login(string? returnurl = "")
         {
             // when a user tries to access a protected link there would 
@@ -156,6 +171,7 @@ namespace ShareSquare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnurl = "")
         {
             ViewData["ReturnUrl"] = returnurl;
@@ -201,6 +217,7 @@ namespace ShareSquare.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
             return View();
@@ -208,6 +225,7 @@ namespace ShareSquare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -248,6 +266,7 @@ namespace ShareSquare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -282,6 +301,7 @@ namespace ShareSquare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public IActionResult ExternalLogin(string provider, string? returnurl = null)
         {
             // generates the URL that the external login provider will redirect the user to after authentication 
@@ -293,6 +313,7 @@ namespace ShareSquare.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string? returnurl = null, string? remoteError = null)
         {
             // If there was an error during the external authentication process, add it to the ModelState and return the Login view
@@ -349,6 +370,7 @@ namespace ShareSquare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string? returnurl = "")
         {
 
@@ -398,12 +420,14 @@ namespace ShareSquare.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -454,12 +478,14 @@ namespace ShareSquare.Controllers
             return RedirectToAction(nameof(AuthenticatorConfirmation));
         }
 
+        [HttpGet]
         public IActionResult AuthenticatorConfirmation()
         {
             return View();
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> VerifyAuthenticatorCode(bool rememberMe, string? returnUrl = null)
         {
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -474,6 +500,7 @@ namespace ShareSquare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> VerifyAuthenticatorCode(VerifyAuthenticatorViewModel model)
         {
             if (!ModelState.IsValid)

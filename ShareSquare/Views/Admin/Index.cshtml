@@ -1,0 +1,75 @@
+﻿@model EntitiesCountViewModel
+
+@{
+    ViewData["Title"] = "Admin - Dashboard Statistics";
+}
+
+<div class="container mt-5">
+    <h1>Dashboard Statistics</h1>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a asp-controller="Admin" asp-action="GetUsers" class="text-decoration-none text-dark">
+                <div class="card shadow-sm hover-shadow-lg">
+                    <div class="card-body">
+                        <h4 class="card-title">Users</h4>
+                        <p class="display-4">@Model.UserCount</p>
+                        <p class="card-text">The total number of users is @Model.UserCount.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a asp-controller="Admin" asp-action="GetReview" class="text-decoration-none text-dark">
+                <div class="card shadow-sm hover-shadow-lg">
+                    <div class="card-body">
+                        <h4 class="card-title">Reviews</h4>
+                        <p class="display-4">@Model.ReviewCount</p>
+                        <p class="card-text">The total number of reviews is @Model.ReviewCount.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a asp-controller="Admin" asp-action="GetErrors" class="text-decoration-none text-dark">
+                <div class="card shadow-sm hover-shadow-lg">
+                    <div class="card-body">
+                        <h4 class="card-title">Errors</h4>
+                        <p class="display-4">@Model.ErrorCount</p>
+                        <p class="card-text">The total number of errors is @Model.ErrorCount.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a asp-controller="Admin" asp-action="GetItems" class="text-decoration-none text-dark">
+                <div class="card shadow-sm hover-shadow-lg">
+                    <div class="card-body">
+                        <h4 class="card-title">Items</h4>
+                        <p class="display-4">@Model.ItemCount</p>
+                        <p class="card-text">The total number of items is @Model.ItemCount.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a asp-controller="Admin" asp-action="GetMessages" class="text-decoration-none text-dark">
+                <div class="card shadow-sm hover-shadow-lg">
+                    <div class="card-body">
+                        <h4 class="card-title">Messages</h4>
+                        <p class="display-4">@Model.MessageCount</p>
+                        <p class="card-text">The total number of messages is @Model.MessageCount.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+</div>

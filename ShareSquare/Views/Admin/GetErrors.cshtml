@@ -1,0 +1,34 @@
+﻿@model ViewModel<Error>
+
+@{
+    ViewData["Title"] = "Admin - Errors";
+}
+
+<h1>Errors</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Text</th>
+            <th>Type</th>
+            <th>Timestamp</th>
+            <th>Status</th>
+            <th>Source</th>
+            <th>StackTrace</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var error in Model.Elements)
+        {
+            <tr>
+                <td>@error.Text</td>
+                <td>@error.Type</td>
+                <td>@error.Timestamp.ToString("g")</td>
+                <td>@error.Status</td>
+                <td>@error.Source</td>
+                <td>@error.StackTrace</td>
+                <td>@error.Data</td>
+            </tr>
+        }
+    </tbody>
+</table>

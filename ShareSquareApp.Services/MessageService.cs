@@ -69,5 +69,15 @@ namespace ShareSquareApp.Services
             return messages;
         }
 
+        public async Task<List<Message>> GetAllMessages()
+        {
+            return await _messageDOA.GetAllMessages();
+        }
+
+        public async Task<int> GetMessagesCount()
+        {
+            return await _messageDOA.GetMessagesCount();
+        }
+
     }
 }
