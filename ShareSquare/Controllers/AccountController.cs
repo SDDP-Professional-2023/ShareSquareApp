@@ -42,7 +42,8 @@ namespace ShareSquare.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(string? returnurl = "")
         {
-            try {
+            try
+            {
                 if (!await _roleManager.RoleExistsAsync("Admin"))
                 {
                     //create roles
@@ -110,7 +111,7 @@ namespace ShareSquare.Controllers
                 }
 
                 return View(model);
-            }            
+            }
             catch (Exception ex)
             {
                 await _errorService.LogErrorAsync(ex);
@@ -122,7 +123,8 @@ namespace ShareSquare.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            try { 
+            try
+            {
                 // Check if the user ID or confirmation code are null
                 // If any of them is null, it indicates an error in the request, hence, display the error view
                 if (userId == null || code == null)

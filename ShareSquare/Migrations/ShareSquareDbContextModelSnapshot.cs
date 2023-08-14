@@ -448,8 +448,8 @@ namespace ShareSquare.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Rating")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });

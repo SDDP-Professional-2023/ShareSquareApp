@@ -7,13 +7,15 @@
 @{
     var conditions = new string[] { "Excellent", "Very good", "Good" };
 }
-
-<h1>List of Items</h1>
+<div class="itemTitle">
+<h1>List of Items</h1></div>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 ml-4 first-col">
+        <div class="col-container">
 
-        <div class="mb-3">
+
+        <div class="mb-3 top-first">
             <label>Start Year</label>
             <select id="startYear" class="form-control">
                 @for (int year = 2000; year <= 2023; year++)
@@ -78,14 +80,15 @@
 
         <button type="button" class="btn btn-primary" id="filter-btn">Filter</button>
         <button type="button" class="btn btn-secondary" id="clear-filter-btn" style="display: none;">Clear Filter</button>
+        </div>
     </div>
 
 
-    <div class="col-md-9">
-        <button class="btn btn-primary sort-btn" id="price-asc-btn" data-sort="price" data-sort-order="asc">Sort by Price Asc</button>
-        <button class="btn btn-primary sort-btn" id="price-desc-btn" data-sort="price" data-sort-order="desc">Sort by Price Desc</button>
-        <button class="btn btn-primary sort-btn" id="year-asc-btn" data-sort="year" data-sort-order="asc">Sort by Year Asc</button>
-        <button class="btn btn-primary sort-btn" id="year-desc-btn" data-sort="year" data-sort-order="desc">Sort by Year Desc</button>
+    <div class="col-md-9 sor second-col " id="second-col ">
+        <button class="btn  sort-btn" id="price-asc-btn" data-sort="price" data-sort-order="asc">Sort by Price Asc</button>
+        <button class="btn  sort-btn" id="price-desc-btn" data-sort="price" data-sort-order="desc">Sort by Price Desc</button>
+        <button class="btn btn-custom sort-btn" id="year-asc-btn" data-sort="year" data-sort-order="asc">Sort by Year Asc</button>
+        <button class="btn y sort-btn" id="year-desc-btn" data-sort="year" data-sort-order="desc">Sort by Year Desc</button>
         <button class="btn btn-secondary" id="clear-sort" style="display: none;">Clear Sort</button>
 
         @if (Model.Count == 0)
@@ -94,18 +97,11 @@
         }
         else
         {
-            <table class="table" id="itemsTable">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Description</th>
-                        <th>Year</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div>
+
+                <div class="card-container">
+                    <div class="row row-cols-1 row-cols-md-3 g-4 itemsList" id="itemsTable">
+
                     @foreach (var item in Model)
                     {
                         var image = item.ImageUrl;
@@ -114,22 +110,26 @@
                             image = "~/Images/" + image;
                         }
 
-                        <tr class="@item.ItemType.ToLower()" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
-                            <td><img src="@image" alt="Item image" style="height:100px; width:100px;" asp-append-version="true"></td>
-                            <td>@item.Title</td>
-                            <td>@item.AuthorOrDeveloper</td>
-                            <td>@item.Description</td>
-                            <td>@item.PublicationYearOrReleaseYear</td>
-                            <td>&pound;@item.Price</td>
-                            <td>
-                                <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" class="btn btn-primary">
+                   
+                       
+                        <div class="card h-100  @item.ItemType.ToLower()" style="width: 20rem; height:30rem;" data-year="@item.PublicationYearOrReleaseYear" data-language="@item.Language" data-condition="@item.Condition" data-price="@item.Price">
+                            <img src="@image" style="height: 12rem;" alt="Item image" asp-append-version="true" class="card-img-top">
+                            <div class="card-body ">
+                                <h5 class="card-title">@item.Title</h5>
+                                <p class="card-text card-description">@item.Description</p>
+                                <p class="card-text">@item.PublicationYearOrReleaseYear</p>
+                                <p class="card-text">&pound;@item.Price</p>
+                                <a asp-action="Details" asp-controller="Item" asp-route-id="@item.ItemId" role="button" class="btn btn-primary btn-block">
                                     View
                                 </a>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
                     }
-                </tbody>
-            </table>
+
+                    </div>
+                </div>
+
+            </div>
         }
     </div>
 </div>
@@ -137,96 +137,75 @@
 
 @section Scripts {
     <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function (event) {
-            document.querySelectorAll('.sort-btn').forEach(function (button) {
-                button.addEventListener('click', function (event) {
-                    var sortKey = event.target.getAttribute('data-sort');
-                    var sortOrder = event.target.getAttribute('data-sort-order');
-                    sortTable(sortKey, sortOrder);
-                    activateButton(sortKey, sortOrder);
-                });
+        $(document).ready(function () {
+            // For sorting
+            $('.sort-btn').click(function (event) {
+                var sortKey = $(this).data('sort');
+                var sortOrder = $(this).data('sort-order');
+                sortTable(sortKey, sortOrder);
+                activateButton(sortKey, sortOrder);
             });
 
-            document.getElementById('clear-sort').addEventListener('click', function () {
+            $('#clear-sort').click(function () {
                 location.reload();
             });
-        });
 
-        function activateButton(sortKey, sortOrder) {
-            ['price-asc-btn', 'price-desc-btn', 'year-asc-btn', 'year-desc-btn'].forEach(function (btnId) {
-                document.getElementById(btnId).disabled = false;
-            });
+            function activateButton(sortKey, sortOrder) {
+                ['price-asc-btn', 'price-desc-btn', 'year-asc-btn', 'year-desc-btn'].forEach(function (btnId) {
+                    $('#' + btnId).prop('disabled', false);
+                });
 
-            document.getElementById(`${sortKey}-${sortOrder}-btn`).disabled = true;
-
-            document.getElementById('clear-sort').style.display = "inline-block";
-        }
-
-        function sortTable(sortKey, sortOrder) {
-            var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById("itemsTable");
-            switching = true;
-
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-
-                    x = rows[i].getAttribute('data-' + sortKey);
-                    y = rows[i + 1].getAttribute('data-' + sortKey);
-
-                    if (sortOrder == 'asc') {
-                        if (parseInt(x) > parseInt(y)) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else {
-                        if (parseInt(x) < parseInt(y)) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
+                $('#' + sortKey + '-' + sortOrder + '-btn').prop('disabled', true);
+                $('#clear-sort').css('display', 'inline-block');
             }
-        }
-    </script>
 
+            function sortTable(sortKey, sortOrder) {
+                var cards = $('#itemsTable .card').toArray();
+                cards.sort(function (a, b) {
+                    var valA = $(a).data(sortKey);
+                    var valB = $(b).data(sortKey);
 
+                    if (sortOrder === 'asc') {
+                        return valA > valB ? 1 : (valA < valB ? -1 : 0);
+                    } else {
+                        return valA < valB ? 1 : (valA > valB ? -1 : 0);
+                    }
+                });
 
-    <script type="text/javascript">
-        $(document).ready(function () {
+                cards.forEach(function (card) {
+                    $('#itemsTable').append(card);
+                });
+            }
+
+            // For filtering
             $('#filter-btn').click(function () {
-                let startYear = $('#startYear').val();
-                let endYear = $('#endYear').val();
+                let startYear = parseInt($('#startYear').val());
+                let endYear = parseInt($('#endYear').val());
 
-                if (parseInt(startYear) > parseInt(endYear)) {
+                if (startYear > endYear) {
                     $('#yearValidationError').show();
-                    return; 
+                    return;
                 } else {
                     $('#yearValidationError').hide();
                 }
 
-                let language = $('#language').val();
-                let condition = $('#condition').val();
-                let price = $('#price').val();
+                let language = $('#language').val().toLowerCase();
+                let condition = $('#condition').val().toLowerCase();
+                let price = parseFloat($('#price').val());
                 let category = $('input[name="category"]:checked').val();
 
-                $('#itemsTable tbody tr').each(function () {
+                $('#itemsTable .card').each(function () {
                     let itemYear = $(this).data('year');
+                    let itemLanguage = $(this).data('language').toLowerCase();
+                    let itemCondition = $(this).data('condition').toLowerCase();
+                    let itemPrice = parseFloat($(this).data('price'));
 
                     if ((category === 'all' || $(this).hasClass(category)) &&
                         (!startYear || itemYear >= startYear) &&
                         (!endYear || itemYear <= endYear) &&
-                        (!language || $(this).data('language').toLowerCase().includes(language.toLowerCase())) &&
-                        (!condition || $(this).data('condition').toLowerCase().includes(condition.toLowerCase())) &&
-                        (!price || $(this).data('price') <= price)) {
+                        (!language || itemLanguage.includes(language)) &&
+                        (!condition || itemCondition.includes(condition)) &&
+                        (!price || itemPrice <= price)) {
                         $(this).show();
                     } else {
                         $(this).hide();
@@ -245,11 +224,12 @@
                 $('input[name="category"]').prop('checked', false);
                 $('#all').prop('checked', true);
 
-                $('#itemsTable tbody tr').show();
+                $('#itemsTable .card').show();
                 $('#yearValidationError').hide();
                 $(this).hide();
             });
         });
+
     </script>
 }
 

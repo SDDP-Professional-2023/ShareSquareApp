@@ -31,7 +31,8 @@ namespace ShareSquare.Controllers
         [Authorize]
         public async Task<IActionResult> CreateAsync(ReviewDTO reviewDTO)
         {
-            try { 
+            try
+            {
                 if (ModelState.IsValid)
                 {
                     var reviewerUser = (ApplicationUser)await _userManager.GetUserAsync(User);
