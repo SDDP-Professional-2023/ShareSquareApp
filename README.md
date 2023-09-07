@@ -81,10 +81,6 @@ We're always open to collaboration! If you're looking to contribute:
 
 Ensure your contributions align with the existing code structure and standards. It's beneficial to check open issues related to your changes before contributing.
 
-## License
-
-ShareSquare operates under the MIT License. Dive into the `LICENSE` file for a comprehensive understanding.
-
 ## Acknowledgments
 
 - Immense gratitude to all our dedicated contributors and vibrant user community.
